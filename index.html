@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JANC.LIVE - Mundial 2026</title>
+    
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+
+    <style>
+        /* Importamos la fuente de 8-bits desde Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+        /* Estilos generales y fondo retro */
+        body {
+            background-color: #000000;
+            color: #39ff14;
+            font-family: 'Press Start 2P', cursive;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            background-image: 
+                linear-gradient(#111 1px, transparent 1px),
+                linear-gradient(90deg, #111 1px, transparent 1px);
+            background-size: 20px 20px;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor principal de la máquina arcade */
+        .arcade-container {
+            width: 95%;
+            max-width: 850px;
+            border: 4px solid #39ff14;
+            padding: 30px 20px;
+            box-shadow: 0 0 20px #39ff14, inset 0 0 15px #39ff14;
+            background-color: rgba(5, 5, 5, 0.9);
+            margin: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Título Principal */
+        h1 {
+            font-size: 2.8rem;
+            margin-top: 0;
+            margin-bottom: 30px;
+            color: #00ffff;
+            text-shadow: 3px 3px 0px #000080, 6px 6px 0px #00ffff;
+            animation: pulse 1.5s infinite;
+            letter-spacing: 2px;
+        }
+
+        /* Contenedor del reproductor simulando una TV antigua */
+        .tv-frame {
+            border: 12px solid #333;
+            border-top-color: #444;
+            border-bottom-color: #222;
+            border-radius: 8px;
+            background-color: #111;
+            padding: 0;
+            position: relative;
+            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: 0 0 25px rgba(57, 255, 20, 0.3);
+        }
+
+        /* Pantalla de "Espera" (Standby) */
+        .standby-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #ff0000;
+            font-size: 1.2rem;
+            text-shadow: 2px 2px 0px #550000;
+            z-index: 0;
+            animation: blink 1s infinite;
+        }
+
+        /* El reproductor de video */
+        .tv-frame iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            z-index: 1;
+            display: none;
+            background-color: #000;
+        }
+
+        /* Texto de instrucción / Consejo (Re-añadido para el doble click) */
+        .tv-tip {
+            font-size: 0.7rem;
+            color: #ffff00; /* Amarillo neón retro */
+            text-shadow: 2px 2px 0px #555500;
+            margin-top: 0;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            letter-spacing: 1px;
+        }
+
+        /* Menú de Canales (Botonera) */
+        .channel-menu {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        /* Botones estilo Arcade */
+        .channel-btn {
+            background-color: #000;
+            color: #39ff14;
+            border: 2px solid #39ff14;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            padding: 12px 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 2px 2px 0px #008000;
+        }
+
+        .channel-btn:hover, .channel-btn.active {
+            background-color: #39ff14;
+            color: #000;
+            box-shadow: 0 0 15px #39ff14;
+            transform: translateY(-2px);
+        }
+
+        /* Texto inferior */
+        footer p {
+            font-size: 1.4rem;
+            color: #ff00ff;
+            text-shadow: 2px 2px 0px #800080;
+            margin: 15px 0 0 0;
+            letter-spacing: 1px;
+        }
+
+        /* Animaciones */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(0.99); }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Ajustes para Móviles */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.6rem; text-shadow: 2px 2px 0px #000080, 4px 4px 0px #00ffff; }
+            .standby-screen { font-size: 0.8rem; }
+            .tv-tip { font-size: 0.55rem; line-height: 1.6; }
+            .channel-btn { font-size: 0.6rem; padding: 10px 15px; }
+            footer p { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="arcade-container">
+        <header>
+            <h1>JANC.LIVE</h1>
+        </header>
+
+        <main>
+            <div class="tv-frame">
+                <div class="standby-screen" id="standby">
+                    <p>INSERT COIN <br><br> (SELECCIONA UN CANAL)</p>
+                </div>
+
+                <iframe id="main-player" 
+                        src="" 
+                        allowfullscreen 
+                        sandbox="allow-scripts allow-same-origin allow-forms">
+                </iframe>
+            </div>
+
+            <p class="tv-tip">TIP: HAGA 2 CLICK EN EL PLAY PARA REPRODUCIR</p>
+
+            <div class="channel-menu">
+                <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=dsports', this)">D-Sports</button>
+                <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=espn', this)">ESPN</button>
+                <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=foxsports', this)">Fox Sports</button>
+                <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=tycsports', this)">TyC Sports</button>
+            </div>
+        </main>
+
+        <footer>
+            <p>MUNDIAL 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        function changeChannel(url, btnElement) {
+            const iframe = document.getElementById('main-player');
+            const standby = document.getElementById('standby');
+            const buttons = document.querySelectorAll('.channel-btn');
+
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            standby.style.display = 'none';
+            iframe.style.display = 'block';
+
+            iframe.src = url;
+        }
+    </script>
+
+</body>
+</html>
