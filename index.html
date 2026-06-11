@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -120,7 +122,7 @@
             flex-wrap: wrap;
             justify-content: center;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         /* Botones estilo Arcade */
@@ -144,6 +146,59 @@
             transform: translateY(-2px);
         }
 
+        /* --- ESTILOS NUEVOS: Botón Morado Neón --- */
+        .purple-btn {
+            background-color: #000;
+            color: #bf00ff; /* Morado neón */
+            border: 2px solid #bf00ff;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9rem;
+            padding: 15px 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 3px 3px 0px #4b0082;
+            margin: 0 auto 20px auto;
+            display: inline-block;
+            animation: pulse-purple 2s infinite;
+        }
+
+        .purple-btn:hover, .purple-btn.active {
+            background-color: #bf00ff;
+            color: #fff;
+            box-shadow: 0 0 20px #bf00ff;
+            transform: translateY(-2px);
+            animation: none;
+        }
+
+        /* --- Estilos para el Panel del Fixture --- */
+        .fixture-container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: 4px solid #bf00ff;
+            background-color: #111;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(191, 0, 255, 0.4), inset 0 0 10px #bf00ff;
+            border-radius: 5px;
+        }
+
+        .fixture-title {
+            font-size: 1.2rem;
+            color: #bf00ff;
+            text-shadow: 2px 2px 0px #4b0082;
+            margin-top: 0;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .fixture-container iframe {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 4px;
+            background-color: #fff;
+        }
+
         /* Texto inferior */
         footer p {
             font-size: 1.4rem;
@@ -162,6 +217,10 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
         }
+        @keyframes pulse-purple {
+            0%, 100% { box-shadow: 3px 3px 0px #4b0082; }
+            50% { box-shadow: 0 0 15px rgba(191, 0, 255, 0.6); }
+        }
 
         /* Ajustes para Móviles */
         @media (max-width: 600px) {
@@ -170,6 +229,9 @@
             .tv-tip { font-size: 0.55rem; line-height: 1.6; }
             .channel-btn { font-size: 0.6rem; padding: 10px 15px; }
             footer p { font-size: 1rem; }
+            .purple-btn { font-size: 0.7rem; padding: 12px 18px; }
+            .fixture-title { font-size: 0.9rem; }
+            .fixture-container iframe { height: 450px; }
         }
     </style>
 </head>
@@ -204,6 +266,13 @@
                 <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=telefe', this)">Telefe</button>
                 <button class="channel-btn" onclick="changeChannel('https://la18hd.com/vivo/canales.php?stream=canal5', this)">Canal 5</button>
             </div>
+
+            <button id="btn-toggle-data" class="purple-btn" onclick="toggleData()">DATOS DE PARTIDOS</button>
+
+            <div class="fixture-container" id="fixture-panel" style="display: none;">
+                <h2 class="fixture-title">DATOS DEL MUNDIAL</h2>
+                <iframe src="https://dtv.datafactory.la/html/v3/minapp/modules/futbol/page/page.html?channel=deportes.futbol.mundial&lang=es_LA&page=fixture" frameborder="0"></iframe>
+            </div>
         </main>
 
         <footer>
@@ -224,6 +293,20 @@
             iframe.style.display = 'block';
 
             iframe.src = url;
+        }
+
+        // Nueva Función para mostrar/ocultar los datos de los partidos
+        function toggleData() {
+            const panel = document.getElementById('fixture-panel');
+            const btn = document.getElementById('btn-toggle-data');
+
+            if (panel.style.display === 'none') {
+                panel.style.display = 'block';
+                btn.classList.add('active');
+            } else {
+                panel.style.display = 'none';
+                btn.classList.remove('active');
+            }
         }
     </script>
 
